@@ -36,6 +36,7 @@ class ADBDevice(_BaseADBDevice):
         device_path = f"/data/local/tmp/{int(time.time())}.mp4"
         full_cmd = self.build_shell_cmd(["screenrecord", device_path])
         proc = subprocess.Popen(full_cmd)
+        time.sleep(0.1)
         assert proc.poll() is None, "screen record start failed"
 
         def stop(pc_path: str = None) -> str:
