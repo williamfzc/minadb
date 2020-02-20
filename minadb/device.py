@@ -1,6 +1,7 @@
 import subprocess
 import typing
 import time
+
 try:
     from loguru import logger as logging
 except ImportError:
@@ -82,15 +83,20 @@ class ADBDevice(_BaseADBDevice):
     def screen_record(self) -> typing.Callable:
         device_path = f"/data/local/tmp/{int(time.time())}.mp4"
         full_cmd = self.build_shell_cmd(["screenrecord", device_path])
+        # start recording process
         proc = subprocess.Popen(full_cmd)
-        time.sleep(0.1)
+        # wait for starting
+        time.sleep(0.2)
         assert proc.poll() is None, "screen record start failed"
+        logging.info("screen record started")
 
         def stop(pc_path: str = None) -> str:
-            proc.terminate()
-            proc.kill()
+            if proc.poll() is not None:
+                logging.warning("screen record process already stopped")
+            else:
+                proc.terminate()
+                proc.kill()
             self.kill_process_by_name("screenrecord")
-
             return self.pull(device_path, pc_path)
 
         return stop
