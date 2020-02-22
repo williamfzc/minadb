@@ -56,7 +56,7 @@ class ADBDevice(_BaseADBDevice):
         return proc_list
 
     def kill_process_by_id(self, process_id: int, signal: int = -2) -> str:
-        return self.shell(["kill", str(signal), process_id])
+        return self.shell(["kill", signal, process_id])
 
     def kill_process_by_name(self, process_name: str, signal: int = -2):
         for each in self.ps():
