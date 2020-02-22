@@ -37,28 +37,12 @@ class _BaseADBDevice(object):
 
 
 class _Process(object):
-    def __init__(
-        self,
-        user: str,
-        pid: int,
-        ppid: int,
-        vsz: int,
-        rss: int,
-        wchan: str,
-        addr: str,
-        s: str,
-        name: str,
-        *unknown,
-    ):
-        self.user = user
-        self.pid = pid
-        self.ppid = ppid
-        self.vsz = vsz
-        self.rss = rss
-        self.wchan = wchan
-        self.addr = addr
-        self.s = s
-        self.name = "".join([name, *unknown])
+    def __init__(self, raw: typing.List[str]):
+        self.raw: typing.List[str] = raw
+        self.raw_str: str = "".join(raw)
+        # todo index sometimes is buggy
+        self.pid: int = int(raw[1])
+        self.ppid: int = int(raw[2])
 
 
 class ADBDevice(_BaseADBDevice):
@@ -68,17 +52,18 @@ class ADBDevice(_BaseADBDevice):
         proc_list: typing.List[typing.List[str]] = [
             [i for i in each.split(" ") if i] for each in proc_list
         ]
-        proc_list: typing.List[_Process] = [_Process(*each) for each in proc_list]
+        proc_list: typing.List[_Process] = [_Process(each) for each in proc_list]
         return proc_list
 
-    def kill_process_by_id(self, process_id: int, signal: int = -9) -> str:
+    def kill_process_by_id(self, process_id: int, signal: int = -2) -> str:
         return self.shell(["kill", str(signal), process_id])
 
-    def kill_process_by_name(self, process_name: str, signal: int = -9):
+    def kill_process_by_name(self, process_name: str, signal: int = -2):
         for each in self.ps():
-            if process_name in each.name:
+            if process_name in each.raw_str:
+                logging.info(f"found process ({each.pid}): {each.raw_str}")
                 return self.kill_process_by_id(each.pid, signal)
-        logging.error(f"no process named: {process_name}")
+        logging.warning(f"no process named: {process_name}")
 
     def screen_record(self) -> typing.Callable:
         device_path = f"/data/local/tmp/{int(time.time())}.mp4"
