@@ -85,3 +85,9 @@ class ADBDevice(_BaseADBDevice):
             return self.pull(device_path, pc_path)
 
         return stop
+
+    def set_wifi(self, status: bool) -> str:
+        return self.shell(["svc", "wifi", "enable" if status else "disable"])
+
+    def set_bluetooth(self, status: bool) -> str:
+        return self.shell(["svc", "bluetooth", "enable" if status else "disable"])
