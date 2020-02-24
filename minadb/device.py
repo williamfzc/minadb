@@ -11,9 +11,13 @@ from minadb.utils import run_cmd
 
 
 class _BaseADBDevice(object):
-    def __init__(self, serial_no: str):
-        self.serial_no: str = serial_no
-        self.basic_cmd: typing.List[str] = ["adb", "-s", self.serial_no]
+    def __init__(self, serial_no: str = None):
+        # should not do the real check (connected or not) here
+        self.serial_no: str = serial_no or ""
+        if self.serial_no:
+            self.basic_cmd: typing.List[str] = ["adb", "-s", self.serial_no]
+        else:
+            self.basic_cmd: typing.List[str] = ["adb"]
 
     def build_shell_cmd(self, cmd: typing.List[str]) -> typing.List[str]:
         return [*self.basic_cmd, "shell", *cmd]
