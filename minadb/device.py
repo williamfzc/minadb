@@ -19,24 +19,22 @@ class _BaseADBDevice(object):
         else:
             self.basic_cmd: typing.List[str] = ["adb"]
 
-    def build_shell_cmd(self, cmd: typing.List[str]) -> typing.List[str]:
+    def build_shell_cmd(self, cmd: typing.Union[str, typing.List[str]]) -> typing.List[str]:
+        if isinstance(cmd, str):
+            cmd = cmd.split()
         return [*self.basic_cmd, "shell", *cmd]
 
-    def build_no_shell_cmd(self, cmd: typing.List[str]) -> typing.List[str]:
+    def build_no_shell_cmd(self, cmd: typing.Union[str, typing.List[str]]) -> typing.List[str]:
+        if isinstance(cmd, str):
+            cmd = cmd.split()
         return [*self.basic_cmd, *cmd]
 
-    def shell(self, cmd: typing.List[str], no_wait: bool = False) -> typing.Union[str, subprocess.Popen]:
-        if no_wait:
-            run = run_cmd_no_wait
-        else:
-            run = run_cmd
+    def shell(self, cmd: typing.Union[str, typing.List[str]], no_wait: bool = False) -> typing.Union[str, subprocess.Popen]:
+        run = run_cmd_no_wait if no_wait else run_cmd
         return run(self.build_shell_cmd(cmd))
 
-    def no_shell(self, cmd: typing.List[str], no_wait: bool = None) -> typing.Union[str, subprocess.Popen]:
-        if no_wait:
-            run = run_cmd_no_wait
-        else:
-            run = run_cmd
+    def no_shell(self, cmd: typing.Union[str, typing.List[str]], no_wait: bool = False) -> typing.Union[str, subprocess.Popen]:
+        run = run_cmd_no_wait if no_wait else run_cmd
         return run(self.build_no_shell_cmd(cmd))
 
     def push(self, pc_path: str, device_path: str) -> str:
