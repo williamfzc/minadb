@@ -27,7 +27,7 @@ __AUTHOR__ = r"williamfzc"
 __AUTHOR_EMAIL__ = r"fengzc@vip.qq.com"
 __LICENSE__ = r"MIT"
 __URL__ = r"https://github.com/williamfzc/minadb"
-__VERSION__ = r"0.1.2"
+__VERSION__ = r"0.2.0"
 __DESCRIPTION__ = r"the simplest adb package. implemented with subprocess, and nothing special but useful."
 
 
