@@ -137,6 +137,48 @@ class ADBDevice(_BaseADBDevice):
             flag: typing.List[str] = []
         return self.no_shell(["uninstall", *flag, package_name])
 
+    def forward(self, local: str, remote: str, no_rebind: bool = None) -> str:
+        """
+        adb forward
+
+        # local:  pc
+        # remote: android
+        """
+        if no_rebind:
+            return self.no_shell(["forward", "--no-rebind", local, remote])
+        return self.no_shell(["forward", local, remote])
+
+    def forward_remove(self, connection_name: str) -> str:
+        return self.no_shell(["forward", "--remove", connection_name])
+
+    def forward_remove_all(self) -> str:
+        return self.no_shell(["forward", "--remove-all"])
+
+    def forward_list(self) -> typing.List[typing.List[str]]:
+        fl = self.no_shell(["forward", "--list"])
+        return [each.split() for each in fl.split("\n") if each]
+
+    def reverse(self, remote: str, local: str, no_rebind: bool = None) -> str:
+        """
+        adb reverse
+
+        # local:  pc
+        # remote: android
+        """
+        if no_rebind:
+            return self.no_shell(["reverse", "--no-rebind", local, remote])
+        return self.no_shell(["reverse", local, remote])
+
+    def reverse_remove(self, connection_name: str) -> str:
+        return self.no_shell(["reverse", "--remove", connection_name])
+
+    def reverse_remove_all(self) -> str:
+        return self.no_shell(["reverse", "--remove-all"])
+
+    def reverse_list(self) -> typing.List[typing.List[str]]:
+        fl = self.no_shell(["reverse", "--list"])
+        return [each.split() for each in fl.split("\n") if each]
+
     # alias
     tap = input_tap
     click = input_tap
