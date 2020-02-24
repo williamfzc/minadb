@@ -24,7 +24,7 @@ class ADBClient(object):
     def start_server(self):
         return run_cmd(["adb", "start-server"])
 
-    def restart(self):
+    def restart_server(self):
         self.kill_server()
         self.start_server()
 
