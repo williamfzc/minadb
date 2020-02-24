@@ -28,7 +28,7 @@ __AUTHOR_EMAIL__ = r"fengzc@vip.qq.com"
 __LICENSE__ = r"MIT"
 __URL__ = r"https://github.com/williamfzc/minadb"
 __VERSION__ = r"0.2.0"
-__DESCRIPTION__ = r"the simplest adb package. implemented with subprocess, and nothing special but useful."
+__DESCRIPTION__ = r"min adb client implemented with subprocess, nothing special but useful and stable."
 
 
 from minadb.device import ADBDevice

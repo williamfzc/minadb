@@ -1,7 +1,6 @@
 # minadb
 
-the simplest adb package. implemented with subprocess, and nothing special but useful.
-
+min adb client implemented with subprocess, nothing special but useful and stable.
 ## goal
 
 i am tired of so many different kinds of adb clients, and now I need a simple/lightweight/stable version for some normal cases.
@@ -32,6 +31,15 @@ print(resp)
 ```
 
 and some built-in functions please read the code directly.
+
+```python
+d.set_bluetooth(True)
+d.set_wifi(True)
+d.click(100, 200)
+d.swipe(100, 200, 400, 400)
+
+# ...
+```
 
 ## notice
 
