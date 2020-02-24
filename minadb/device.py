@@ -103,9 +103,6 @@ class ADBDevice(_BaseADBDevice):
     def keyevent(self, key_code: int) -> str:
         return self.shell(["input", "keyevent", str(key_code)])
 
-    def force_stop(self, package: str) -> str:
-        return self.shell(["am", "force-stop", package])
-
     def get_width_and_height(self) -> typing.List[int]:
         content = self.shell(["wm", "size"])
         return [int(each) for each in content.split()[-1].split("x")[:2]]
@@ -119,7 +116,23 @@ class ADBDevice(_BaseADBDevice):
     def input_swipe(self, x1: int, y1: int, x2: int, y2: int) -> str:
         return self.shell(["input", "swipe", x1, y1, x2, y2])
 
+    def is_screen_on(self) -> bool:
+        output = self.shell(["dumpsys", "power"])
+        return 'mHoldingDisplaySuspendBlocker=true' in output
+
+    def am_force_stop(self, package_name: str) -> str:
+        return self.shell(["am", "force-stop", package_name])
+
+    def pm_clear(self, package_name: str) -> str:
+        return self.shell(["pm", "clear", package_name])
+
     # alias
     tap = input_tap
     click = input_tap
     swipe = input_swipe
+    wm_size = get_width_and_height
+    window_size = get_width_and_height
+    force_stop = am_force_stop
+    app_stop = am_force_stop
+    clear_cache = pm_clear
+    app_clear = pm_clear
