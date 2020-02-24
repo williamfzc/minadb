@@ -126,6 +126,17 @@ class ADBDevice(_BaseADBDevice):
     def pm_clear(self, package_name: str) -> str:
         return self.shell(["pm", "clear", package_name])
 
+    def install(self, pc_path: str, flag: typing.List[str] = None) -> str:
+        if not flag:
+            flag: typing.List[str] = ["-r", "-d"]
+        return self.no_shell(["install", *flag, pc_path])
+
+    def uninstall(self, package_name, flag: typing.List[str]) -> str:
+        if not flag:
+            # -k
+            flag: typing.List[str] = []
+        return self.no_shell(["uninstall", *flag, package_name])
+
     # alias
     tap = input_tap
     click = input_tap
