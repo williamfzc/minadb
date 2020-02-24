@@ -10,3 +10,7 @@ def run_cmd(cmd: typing.List[str], no_decode: bool = None) -> typing.Union[bytes
     if no_decode:
         return r
     return r.decode()
+
+
+def run_cmd_no_wait(cmd: typing.List[str]) -> subprocess.Popen:
+    return subprocess.Popen(cmd)

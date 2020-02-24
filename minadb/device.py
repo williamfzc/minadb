@@ -7,7 +7,7 @@ try:
 except ImportError:
     import logging
 
-from minadb.utils import run_cmd
+from minadb.utils import run_cmd, run_cmd_no_wait
 
 
 class _BaseADBDevice(object):
@@ -25,11 +25,19 @@ class _BaseADBDevice(object):
     def build_no_shell_cmd(self, cmd: typing.List[str]) -> typing.List[str]:
         return [*self.basic_cmd, *cmd]
 
-    def shell(self, cmd: typing.List[str]) -> str:
-        return run_cmd(self.build_shell_cmd(cmd))
+    def shell(self, cmd: typing.List[str], no_wait: bool = False) -> typing.Union[str, subprocess.Popen]:
+        if no_wait:
+            run = run_cmd_no_wait
+        else:
+            run = run_cmd
+        return run(self.build_shell_cmd(cmd))
 
-    def no_shell(self, cmd: typing.List[str]) -> str:
-        return run_cmd(self.build_no_shell_cmd(cmd))
+    def no_shell(self, cmd: typing.List[str], no_wait: bool = None) -> typing.Union[str, subprocess.Popen]:
+        if no_wait:
+            run = run_cmd_no_wait
+        else:
+            run = run_cmd
+        return run(self.build_no_shell_cmd(cmd))
 
     def push(self, pc_path: str, device_path: str) -> str:
         cmd = ["push", pc_path, device_path]
@@ -71,9 +79,7 @@ class ADBDevice(_BaseADBDevice):
 
     def screen_record(self) -> typing.Callable:
         device_path = f"/data/local/tmp/{int(time.time())}.mp4"
-        full_cmd = self.build_shell_cmd(["screenrecord", device_path])
-        # start recording process
-        proc = subprocess.Popen(full_cmd)
+        proc = self.shell(["screenrecord", device_path], no_wait=True)
         # wait for starting
         time.sleep(0.2)
         assert proc.poll() is None, "screen record start failed"
