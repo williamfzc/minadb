@@ -10,6 +10,8 @@ as you can see, this repo will keep using subprocess to make it simple and origi
 
 ## usage
 
+this repo aims at making everything simple enough.
+
 ```python
 from minadb import ADBDevice
 from minadb import ADBClient
@@ -22,6 +24,9 @@ print(d_list)
 
 # device
 d = ADBDevice("123456F")
+# or only one device connected, you can ignore the serial no
+d = ADBDevice()
+
 resp = d.shell(["am", "start", "com.android.camera"])
 print(resp)
 ```
@@ -30,9 +35,10 @@ and some built-in functions please read the code directly.
 
 ## notice
 
-- i know some python packages are designed to be used in production.
+- i know some other python packages are designed to be used in production.
 - they are good, i know, and i have paid a lot on these packages.
 - i am tired of weird bugs.
+- this repo may have some origin bugs from adb, of course.
 
 ## development
 
