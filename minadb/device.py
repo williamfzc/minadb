@@ -99,3 +99,13 @@ class ADBDevice(_BaseADBDevice):
 
     def set_bluetooth(self, status: bool) -> str:
         return self.shell(["svc", "bluetooth", "enable" if status else "disable"])
+
+    def keyevent(self, key_code: int) -> str:
+        return self.shell(["input", "keyevent", str(key_code)])
+
+    def force_stop(self, package: str) -> str:
+        return self.shell(["am", "force-stop", package])
+
+    def get_width_and_height(self) -> typing.List[int]:
+        content = self.shell(["wm", "size"])
+        return [int(each) for each in content.split()[-1].split("x")[:2]]
