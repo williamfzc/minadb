@@ -109,3 +109,17 @@ class ADBDevice(_BaseADBDevice):
     def get_width_and_height(self) -> typing.List[int]:
         content = self.shell(["wm", "size"])
         return [int(each) for each in content.split()[-1].split("x")[:2]]
+
+    def input_text(self, text: str) -> str:
+        return self.shell(["input", "text", f"\"{text}\""])
+
+    def input_tap(self, x: int, y: int) -> str:
+        return self.shell(["input", "tap", x, y])
+
+    def input_swipe(self, x1: int, y1: int, x2: int, y2: int) -> str:
+        return self.shell(["input", "swipe", x1, y1, x2, y2])
+
+    # alias
+    tap = input_tap
+    click = input_tap
+    swipe = input_swipe
