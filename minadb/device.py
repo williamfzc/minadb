@@ -49,7 +49,7 @@ class _BaseADBDevice(object):
 class _Process(object):
     def __init__(self, raw: typing.List[str]):
         self.raw: typing.List[str] = raw
-        self.raw_str: str = "".join(raw)
+        self.raw_str: str = " ".join(raw)
         # todo index sometimes is buggy
         self.pid: int = int(raw[1])
         self.ppid: int = int(raw[2])
