@@ -65,10 +65,12 @@ class ADBDevice(_BaseADBDevice):
         proc_list: typing.List[_Process] = [_Process(each) for each in proc_list]
         return proc_list
 
-    def kill_process_by_id(self, process_id: int, signal: int = -2) -> str:
+    def kill_process_by_id(self, process_id: int, signal: int = None) -> str:
+        if not signal:
+            return self.shell(["kill", process_id])
         return self.shell(["kill", signal, process_id])
 
-    def kill_process_by_name(self, process_name: str, signal: int = -2):
+    def kill_process_by_name(self, process_name: str, signal: int = None):
         for each in self.ps():
             if process_name in each.raw_str:
                 logging.info(f"found process ({each.pid}): {each.raw_str}")
