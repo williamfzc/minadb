@@ -1,6 +1,7 @@
 import subprocess
 import typing
 import time
+import os
 
 try:
     from loguru import logger as logging
@@ -128,6 +129,13 @@ class ADBDevice(_BaseADBDevice):
     def pm_clear(self, package_name: str) -> str:
         return self.shell(["pm", "clear", package_name])
 
+    def pm_list_package(self) -> typing.List[str]:
+        package_list = self.shell(["pm", "list", "package"]).split(os.linesep)
+        return [each.split(":")[1] for each in package_list if each]
+
+    def is_package_installed(self, package_name: str) -> bool:
+        return package_name in self.pm_list_package()
+
     def install(self, pc_path: str, flag: typing.List[str] = None) -> str:
         if not flag:
             flag: typing.List[str] = ["-r", "-d"]
@@ -191,3 +199,5 @@ class ADBDevice(_BaseADBDevice):
     app_stop = am_force_stop
     clear_cache = pm_clear
     app_clear = pm_clear
+    list_package = pm_list_package
+    is_installed = is_package_installed
