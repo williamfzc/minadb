@@ -123,6 +123,9 @@ class ADBDevice(_BaseADBDevice):
         output = self.shell(["dumpsys", "power"])
         return 'mHoldingDisplaySuspendBlocker=true' in output
 
+    def open_browser(self, url: str) -> str:
+        return self.shell(['am', 'start', '-a', 'android.intent.action.VIEW', '-d', url])
+
     def am_force_stop(self, package_name: str) -> str:
         return self.shell(["am", "force-stop", package_name])
 
