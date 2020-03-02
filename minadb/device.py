@@ -20,21 +20,29 @@ class _BaseADBDevice(object):
         else:
             self.basic_cmd: typing.List[str] = ["adb"]
 
-    def build_shell_cmd(self, cmd: typing.Union[str, typing.List[str]]) -> typing.List[str]:
+    def build_shell_cmd(
+        self, cmd: typing.Union[str, typing.List[str]]
+    ) -> typing.List[str]:
         if isinstance(cmd, str):
             cmd = cmd.split()
         return [*self.basic_cmd, "shell", *cmd]
 
-    def build_no_shell_cmd(self, cmd: typing.Union[str, typing.List[str]]) -> typing.List[str]:
+    def build_no_shell_cmd(
+        self, cmd: typing.Union[str, typing.List[str]]
+    ) -> typing.List[str]:
         if isinstance(cmd, str):
             cmd = cmd.split()
         return [*self.basic_cmd, *cmd]
 
-    def shell(self, cmd: typing.Union[str, typing.List[str]], no_wait: bool = False) -> typing.Union[str, subprocess.Popen]:
+    def shell(
+        self, cmd: typing.Union[str, typing.List[str]], no_wait: bool = False
+    ) -> typing.Union[str, subprocess.Popen]:
         run = run_cmd_no_wait if no_wait else run_cmd
         return run(self.build_shell_cmd(cmd))
 
-    def no_shell(self, cmd: typing.Union[str, typing.List[str]], no_wait: bool = False) -> typing.Union[str, subprocess.Popen]:
+    def no_shell(
+        self, cmd: typing.Union[str, typing.List[str]], no_wait: bool = False
+    ) -> typing.Union[str, subprocess.Popen]:
         run = run_cmd_no_wait if no_wait else run_cmd
         return run(self.build_no_shell_cmd(cmd))
 
@@ -111,7 +119,7 @@ class ADBDevice(_BaseADBDevice):
         return [int(each) for each in content.split()[-1].split("x")[:2]]
 
     def input_text(self, text: str) -> str:
-        return self.shell(["input", "text", f"\"{text}\""])
+        return self.shell(["input", "text", f'"{text}"'])
 
     def input_tap(self, x: int, y: int) -> str:
         return self.shell(["input", "tap", x, y])
@@ -121,10 +129,12 @@ class ADBDevice(_BaseADBDevice):
 
     def is_screen_on(self) -> bool:
         output = self.shell(["dumpsys", "power"])
-        return 'mHoldingDisplaySuspendBlocker=true' in output
+        return "mHoldingDisplaySuspendBlocker=true" in output
 
     def open_browser(self, url: str) -> str:
-        return self.shell(['am', 'start', '-a', 'android.intent.action.VIEW', '-d', url])
+        return self.shell(
+            ["am", "start", "-a", "android.intent.action.VIEW", "-d", url]
+        )
 
     def am_force_stop(self, package_name: str) -> str:
         return self.shell(["am", "force-stop", package_name])
