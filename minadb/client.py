@@ -1,4 +1,5 @@
 import typing
+import os
 
 from minadb.utils import run_cmd
 
@@ -6,7 +7,7 @@ from minadb.utils import run_cmd
 class ADBClient(object):
     def devices(self) -> typing.List[typing.List[str]]:
         output = str(run_cmd(["adb", "devices"]))
-        raw_device_list = [each.split("\t") for each in output.split("\n")[1:] if each]
+        raw_device_list = [each.split("\t") for each in output.split(os.linesep)[1:] if each]
 
         # [['123456E', 'device'], ['123456F', 'offline']]
         return raw_device_list
@@ -31,7 +32,7 @@ class ADBClient(object):
 
 if __name__ == "__main__":
     cli = ADBClient()
-    cli.restart()
+    cli.restart_server()
     d = cli.available_devices()
     print(d)
     a = cli.is_device_available("123456F")
