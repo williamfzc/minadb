@@ -1,6 +1,9 @@
 # minadb
 
+![PyPI](https://img.shields.io/pypi/v/minadb)
+
 min adb client implemented with subprocess, nothing special but useful and stable.
+
 ## goal
 
 i am tired of so many different kinds of adb clients, and now I need a simple/lightweight/stable version for some normal cases.
