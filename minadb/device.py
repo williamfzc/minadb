@@ -207,7 +207,7 @@ class ADBDevice(OriginADBDevice):
     def press_menu(self) -> str:
         return self.keyevent(187)
 
-    def switch_to_previous_app(self, duration: float = 1.):
+    def switch_to_previous_app(self, duration: float = 1.0):
         self.press_menu()
         time.sleep(duration)
         self.press_menu()
@@ -232,7 +232,7 @@ class ADBDevice(OriginADBDevice):
             self.press_back()
             self.press_home()
 
-    def clean_recent(self, duration: float = 1.):
+    def clean_recent(self, duration: float = 1.0):
         self.force_home()
         launcher = self.current_app()
         self.switch_to_previous_app()
@@ -288,6 +288,29 @@ class ADBDevice(OriginADBDevice):
 
     def current_activity(self) -> str:
         return self.current()[1]
+
+    def ratio2position(self, x: float, y: float) -> typing.List[float]:
+        w, h = self.get_width_and_height()
+        return w * x, h * y
+
+    def center_point(self) -> typing.List[float]:
+        return self.ratio2position(0.5, 0.5)
+
+    def smart_swipe(self, from_: str, to: str, ratio: float = 0.25) -> str:
+        assert 0 <= ratio <= 1, "ratio range (float): [0, 0.5]. default: 0.25"
+        half = 0.5
+        point_dict = {
+            "c": (half, half),
+            "w": (half - ratio, half),
+            "e": (half + ratio, half),
+            "n": (half, half - ratio),
+            "s": (half, half + ratio),
+        }
+
+        return self.swipe(
+            *self.ratio2position(*point_dict[from_]),
+            *self.ratio2position(*point_dict[to]),
+        )
 
     # alias
     tap = click = OriginADBDevice.input_tap
