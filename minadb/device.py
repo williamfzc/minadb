@@ -297,7 +297,7 @@ class ADBDevice(OriginADBDevice):
         return self.ratio2position(0.5, 0.5)
 
     def smart_swipe(self, from_: str, to: str, ratio: float = 0.25) -> str:
-        assert 0 <= ratio <= 1, "ratio range (float): [0, 0.5]. default: 0.25"
+        assert 0 <= ratio <= 0.5, "ratio range (float): [0, 0.5]. default: 0.25"
         half = 0.5
         point_dict = {
             "c": (half, half),
