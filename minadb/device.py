@@ -289,11 +289,11 @@ class ADBDevice(OriginADBDevice):
     def current_activity(self) -> str:
         return self.current()[1]
 
-    def ratio2position(self, x: float, y: float) -> typing.List[float]:
+    def ratio2position(self, x: float, y: float) -> typing.Tuple:
         w, h = self.get_width_and_height()
         return w * x, h * y
 
-    def center_point(self) -> typing.List[float]:
+    def center_point(self) -> typing.Tuple[float]:
         return self.ratio2position(0.5, 0.5)
 
     def smart_swipe(self, from_: str, to: str, ratio: float = 0.25) -> str:
