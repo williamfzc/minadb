@@ -312,6 +312,15 @@ class ADBDevice(OriginADBDevice):
             *self.ratio2position(*point_dict[to]),
         )
 
+    def screenshot(self, to_sdcard: str = None, to_pc: str = None):
+        sdcard_path = r"/data/local/tmp/minadb_shot.png"
+        if to_sdcard:
+            sdcard_path = to_sdcard
+
+        self.shell(["screencap", "-p", sdcard_path])
+        if to_pc:
+            self.pull(sdcard_path, to_pc)
+
     # alias
     tap = click = OriginADBDevice.input_tap
     swipe = OriginADBDevice.input_swipe
@@ -324,3 +333,4 @@ class ADBDevice(OriginADBDevice):
     set_wifi = OriginADBDevice.svc_wifi
     is_installed = is_package_installed
     press_recent = press_switch = press_menu
+    screencap = screenshot
