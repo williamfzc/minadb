@@ -321,6 +321,34 @@ class ADBDevice(OriginADBDevice):
         if to_pc:
             self.pull(sdcard_path, to_pc)
 
+    def play_audio(self, source_path: str) -> str:
+        return self.shell(
+            [
+                "am",
+                "start",
+                "-a",
+                "android.intent.action.VIEW",
+                "-t",
+                "audio/mp3",
+                "-d",
+                f"file://{source_path}",
+            ]
+        )
+
+    def play_video(self, source_path: str) -> str:
+        return self.shell(
+            [
+                "am",
+                "start",
+                "-a",
+                "android.intent.action.VIEW",
+                "-t",
+                "video/*",
+                "-d",
+                f"file://{source_path}",
+            ]
+        )
+
     # alias
     tap = click = OriginADBDevice.input_tap
     swipe = OriginADBDevice.input_swipe
@@ -334,3 +362,4 @@ class ADBDevice(OriginADBDevice):
     is_installed = is_package_installed
     press_recent = press_switch = press_menu
     screencap = screenshot
+    play_music = play_audio
