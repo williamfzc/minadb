@@ -153,6 +153,9 @@ class OriginADBDevice(_BaseADBDevice):
     def am_kill(self, package_name: str, *options) -> str:
         return self.shell(["am", "kill", *options, package_name])
 
+    def am_start(self, package_name: str, *options) -> str:
+        return self.shell(["am", "start", *options, package_name])
+
     def pm_clear(self, package_name: str) -> str:
         return self.shell(["pm", "clear", package_name])
 
