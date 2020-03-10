@@ -33,7 +33,7 @@ resp = d.shell(["am", "start", "com.android.camera"])
 print(resp)
 ```
 
-and some built-in functions please read the code directly.
+lots of built-in functions:
 
 ```python
 d.set_bluetooth(True)
@@ -42,6 +42,71 @@ d.click(100, 200)
 d.swipe(100, 200, 400, 400)
 
 # ...
+```
+
+and more:
+
+```python
+['am_force_stop',
+ 'am_instrument',
+ 'am_kill',
+ 'am_start',
+ 'app_clear',
+ 'app_stop',
+ 'center_point',
+ 'clean_recent',
+ 'clear_cache',
+ 'click',
+ 'current',
+ 'current_activity',
+ 'current_app',
+ 'force_home',
+ 'force_stop',
+ 'get_width_and_height',
+ 'getprop',
+ 'input_keyevent',
+ 'input_swipe',
+ 'input_tap',
+ 'input_text',
+ 'install',
+ 'is_installed',
+ 'is_package_installed',
+ 'is_screen_on',
+ 'keyevent',
+ 'kill_process_by_id',
+ 'kill_process_by_name',
+ 'list_package',
+ 'open_browser',
+ 'play_audio',
+ 'play_music',
+ 'play_video',
+ 'pm_clear',
+ 'pm_disable',
+ 'pm_enable',
+ 'pm_list_package',
+ 'press_back',
+ 'press_home',
+ 'press_menu',
+ 'press_recent',
+ 'press_switch',
+ 'ps',
+ 'ratio2position',
+ 'screen_record',
+ 'screencap',
+ 'screenshot',
+ 'set_bluetooth',
+ 'set_wifi',
+ 'smart_swipe',
+ 'svc_bluetooth',
+ 'svc_wifi',
+ 'swipe',
+ 'switch_to_previous_app',
+ 'tap',
+ 'uninstall',
+ 'window_size',
+ 'wm_size',
+ ...
+]
 ```
 
 ## notice
