@@ -156,6 +156,12 @@ class OriginADBDevice(_BaseADBDevice):
     def am_start(self, package_name: str, *options) -> str:
         return self.shell(["am", "start", *options, package_name])
 
+    def am_instrument(self, args: typing.Union[str, list], no_wait: bool = None) -> str:
+        prefix = ["am", "instrument"]
+        if isinstance(args, list):
+            return self.shell([*prefix, *args], no_wait=no_wait)
+        return self.shell(" ".join(prefix) + " " + args, no_wait=no_wait)
+
     def pm_clear(self, package_name: str) -> str:
         return self.shell(["pm", "clear", package_name])
 
