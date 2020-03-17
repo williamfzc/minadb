@@ -8,7 +8,12 @@ class ADBClient(object):
     def devices(self) -> typing.List[typing.List[str]]:
         output = str(run_cmd(["adb", "devices"]))
         raw_device_list = [
-            each.split("\t") for each in output.split(os.linesep)[1:] if each
+            # remove \r (#6)
+            [each_str.replace("\r", "") for each_str in each.split("\t")]
+            # split devices
+            for each in output.split(os.linesep)[1:]
+            # ignore empty line
+            if each
         ]
 
         # [['123456E', 'device'], ['123456F', 'offline']]
