@@ -200,6 +200,12 @@ class OriginADBDevice(_BaseADBDevice):
                 logging.warning(f"format error: {each}")
         return result
 
+    def uiautomator_dump(self, path: str = "/data/local/tmp/layout.xml") -> str:
+        return self.shell(["uiautomator", "dump", path])
+
+    def cat(self, path: str) -> str:
+        return self.shell(["cat", path])
+
 
 class ADBDevice(OriginADBDevice):
     """
@@ -357,6 +363,11 @@ class ADBDevice(OriginADBDevice):
                 f"file://{source_path}",
             ]
         )
+
+    def dump_ui(self) -> str:
+        path = r"/data/local/tmp/layout.xml"
+        self.uiautomator_dump(path)
+        return self.cat(path)
 
     # alias
     tap = click = OriginADBDevice.input_tap
