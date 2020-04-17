@@ -230,17 +230,32 @@ class ADBDevice(OriginADBDevice):
     def is_package_installed(self, package_name: str) -> bool:
         return package_name in self.pm_list_package()
 
+    def get_process_id_by_name(self, process_name: str) -> typing.Optional[int]:
+        pid_list = self.get_process_id_list_by_name(process_name)
+        if not pid_list:
+            # no process
+            # it will not raise exception because of its origin design
+            return None
+        return pid_list[0]
+
+    def get_process_id_list_by_name(self, process_name: str) -> typing.List[int]:
+        pid_list = []
+        for each in self.ps():
+            if process_name in each.raw_str:
+                logging.info(f"found process ({each.pid}): {each.raw_str}")
+                pid_list.append(each.pid)
+        if not pid_list:
+            logging.warning(f"no process named: {process_name}")
+        return pid_list
+
     def kill_process_by_id(self, process_id: int, signal: int = None) -> str:
         if not signal:
             return self.shell(["kill", process_id])
         return self.shell(["kill", signal, process_id])
 
     def kill_process_by_name(self, process_name: str, signal: int = None):
-        for each in self.ps():
-            if process_name in each.raw_str:
-                logging.info(f"found process ({each.pid}): {each.raw_str}")
-                return self.kill_process_by_id(each.pid, signal)
-        logging.warning(f"no process named: {process_name}")
+        for each in self.get_process_id_list_by_name(process_name):
+            self.kill_process_by_id(each, signal)
 
     def force_home(self, loop_time: int = 3):
         for _ in range(loop_time):
