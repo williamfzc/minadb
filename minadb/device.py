@@ -290,7 +290,12 @@ class ADBDevice(OriginADBDevice):
             else:
                 proc.terminate()
                 proc.kill()
-            self.kill_process_by_name("screenrecord")
+            try:
+                self.kill_process_by_name("screenrecord")
+            except subprocess.CalledProcessError as e:
+                # process already killed
+                logging.warning(f"seems process already dead: {e}")
+
             return self.pull(device_path, pc_path)
 
         return stop
