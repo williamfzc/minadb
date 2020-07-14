@@ -276,9 +276,13 @@ class ADBDevice(OriginADBDevice):
             time.sleep(duration)
             cur = self.current_app()
 
-    def screen_record(self) -> typing.Callable:
+    def screen_record(self, **kwargs) -> typing.Callable:
         device_path = f"/data/local/tmp/{int(time.time())}.mp4"
-        proc = self.shell(["screenrecord", device_path], no_wait=True)
+        command = ["screenrecord", device_path]
+        for k, v in kwargs.items():
+            command.append(k)
+            command.append(v)
+        proc = self.shell(command, no_wait=True)
         # wait for starting
         time.sleep(0.2)
         assert proc.poll() is None, "screen record start failed"
